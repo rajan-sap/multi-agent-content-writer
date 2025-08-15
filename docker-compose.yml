@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  multi-agent-content-writer:
+    build: .
+    container_name: content-writer
+    volumes:
+      # Mount output directory to persist generated content
+      - ./output:/app/output
+      # Mount .env file for API keys
+      - ./.env:/app/.env:ro
+    environment:
+      - PYTHONPATH=/app
+    stdin_open: true
+    tty: true
+    # Override default command for interactive mode
+    command: python main.py
+
+  # Optional: Development mode with live code reload
+  dev:
+    build: .
+    container_name: content-writer-dev
+    volumes:
+      - .:/app
+      - ./output:/app/output
+    environment:
+      - PYTHONPATH=/app
+    stdin_open: true
+    tty: true
+    command: /bin/bash
